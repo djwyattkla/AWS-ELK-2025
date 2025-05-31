@@ -1,0 +1,14 @@
+
+# Terraform files
+*.tfstate
+*.tfstate.backup
+.terraform/
+terraform.tfvars
+
+# SSH Keys
+*.pem
+
+# IDE and OS files
+.DS_Store
+*.swp
+*.swo

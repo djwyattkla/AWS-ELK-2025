@@ -1,85 +1,70 @@
 
-# 🛡️ ELK Stack Pentesting Lab (AWS Terraform Deployment)
+# ELK Pentesting Lab on AWS
 
-This project creates a fully functional offensive security lab using AWS EC2 and Terraform. It includes:
+![Terraform](https://img.shields.io/badge/Terraform-Ready-blueviolet?logo=terraform)
+![AWS](https://img.shields.io/badge/AWS-EC2-orange?logo=amazon-aws)
+![License](https://img.shields.io/github/license/yourusername/elk-lab)
 
-- ✅ Kali Linux attacker machine
-- ✅ Ubuntu victim machine running DVWA (Damn Vulnerable Web App)
-- ✅ ELK Stack (Elasticsearch, Logstash, Kibana) for log collection and analysis
-
-## 🌍 Region
-
-All resources are deployed in: `us-east-1 (N. Virginia)`
+> A modular AWS-based lab for learning, pentesting, and monitoring using Kali Linux, DVWA, and the ELK Stack.
 
 ---
 
-## 🚀 Infrastructure Overview
+## 🌐 Architecture Overview
 
-| Role         | AMI                                 | Instance Type | Public IP        | Purpose                    |
-|--------------|--------------------------------------|----------------|------------------|----------------------------|
-| Kali Linux   | `ami-0cf57d4e3b64b608b`              | `t3.medium`    | Dynamic          | Attacker + pentest tools  |
-| Victim       | Ubuntu 22.04 LTS                     | `t2.micro`     | Dynamic          | Runs DVWA vulnerable site |
-| ELK Server   | Ubuntu 22.04 LTS                     | `t2.medium`    | Dynamic          | ELK Stack (ES, Logstash, Kibana) |
-
----
-
-## 🔐 SSH Access
-
-All instances use this key pair:
 ```
-kali-key-east.pem
+┌────────────┐        ┌────────────┐        ┌────────────┐
+│   Kali EC2 │◄──────►│  Victim EC2│◄──────►│   ELK EC2  │
+│ (t3.medium)│        │ (DVWA App) │        │ Kibana +   │
+│ Attacker   │        │ Web Server │        │ Logstash   │
+└────────────┘        └────────────┘        │ Elasticsearch │
+                                            └────────────┘
+         All resources are deployed in AWS us-east-1
 ```
 
-Access using:
-```bash
-ssh -i ~/Downloads/kali-key-east.pem ubuntu@<public-ip>     # for victim and ELK
-ssh -i ~/Downloads/kali-key-east.pem kali@<public-ip>       # for Kali
-```
+## 🚀 Features
 
----
+- ✅ Kali Linux attacker node with public SSH access
+- ✅ Ubuntu victim machine running DVWA
+- ✅ ELK Stack (Kibana on port 5601)
+- ✅ Public access security group for testing
+- ✅ Ideal for CTFs, blue/red team exercises, and SOC training
 
-## 🌐 URLs to Access
+## 🔧 Prerequisites
 
-| Service   | URL Format                                   |
-|-----------|----------------------------------------------|
-| DVWA      | `http://<victim_public_ip>/dvwa`             |
-| Kibana    | `http://<elk_public_ip>:5601`                |
-| Elasticsearch | `http://<elk_public_ip>:9200`           |
+- Terraform CLI
+- AWS CLI (configured)
+- An existing key pair in the target region
 
----
+## 🏗️ Deployment
 
-## ⚙️ Terraform Commands
-
-To deploy the lab:
 ```bash
 terraform init
 terraform apply
 ```
 
-To shut down (pause billing):
-```bash
-# Stop from EC2 console or optionally use CLI
-```
+> Ensure you select the correct AWS region (`us-east-1`) and have valid SSH key access configured.
 
-To destroy completely:
+## 📜 Notes
+
+- SSH, HTTP, and Kibana ports are exposed to `0.0.0.0/0` — intended for isolated test environments
+- Consider adding IP restrictions or VPN for more secure use
+
+## 🧹 Cleanup
+
 ```bash
 terraform destroy
 ```
 
----
+## 📂 Files Included
 
-## 📌 Notes
+- `main.tf` – defines all EC2 instances and networking
+- `.gitignore` – excludes state files and credentials
+- `README.md` – project overview and usage instructions
 
-- DVWA is auto-installed on the victim via `user_data`
-- ELK stack services are auto-installed and started
-- Public IPs are dynamic unless Elastic IPs are attached
-- Ports 22 (SSH), 80 (HTTP), 5601 (Kibana) are open
+## 📸 Banner (Optional)
 
----
+![ELK Lab Banner](https://dummyimage.com/1000x250/000000/00ffcc.png&text=ELK+Pentest+Lab+on+AWS)
 
-## ✅ Status
+## 📄 License
 
-All components tested and confirmed working:
-- [x] Kali SSH and tools
-- [x] DVWA running on victim
-- [x] Kibana and Elasticsearch accessible
+This project is licensed under the MIT License.
